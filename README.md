@@ -1,2 +1,2 @@
-# red-node-whatsapp-ai-bot
-Arquivo de importação para o red-node, com chatbot com ia pré configurado.
+# node-red-whatsapp-ai-bot
+Arquivo de importação para o node-red, com chatbot com ia pré configurado.
