@@ -1,0 +1,129 @@
+[
+    {
+        "id": "f68bb30370982996",
+        "type": "tab",
+        "label": "Fluxo 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2844ce57f30f61a5",
+        "type": "http in",
+        "z": "f68bb30370982996",
+        "name": "",
+        "url": "/webhook",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100,
+        "y": 180,
+        "wires": [
+            [
+                "8fe16a061af48d8d"
+            ]
+        ]
+    },
+    {
+        "id": "8fe16a061af48d8d",
+        "type": "function",
+        "z": "f68bb30370982996",
+        "name": "Preparar requisição OpenRouter",
+        "func": "msg.payload = {\n    \"model\": \"openai/gpt-3.5-turbo\",\n    \"messages\": [\n        { \"role\": \"system\", \"content\": \"Você é um assistente de IA.\" },\n        { \"role\": \"user\", \"content\": msg.payload.input }\n    ]\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 180,
+        "wires": [
+            [
+                "e079a951edbe2df9"
+            ]
+        ]
+    },
+    {
+        "id": "e079a951edbe2df9",
+        "type": "http request",
+        "z": "f68bb30370982996",
+        "name": "Chamar OpenRouter",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "key": "Content-Type",
+                "value": "application/json"
+            },
+            {
+                "key": "Authorization",
+                "value": "Bearer API_KEY"
+            }
+        ],
+        "x": 660,
+        "y": 180,
+        "wires": [
+            [
+                "1b389e2133dcedd7"
+            ]
+        ]
+    },
+    {
+        "id": "1b389e2133dcedd7",
+        "type": "function",
+        "z": "f68bb30370982996",
+        "name": "Preparar requisição WhatsApp",
+        "func": "msg.payload = {\n    \"message\": msg.payload.choices[0].message.content\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 180,
+        "wires": [
+            [
+                "3d02a93309a2e3db"
+            ]
+        ]
+    },
+    {
+        "id": "3d02a93309a2e3db",
+        "type": "http request",
+        "z": "f68bb30370982996",
+        "name": "Enviar para WhatsApp",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "URL_WHATSAPP_API:3000/send",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "other",
+                "keyValue": "",
+                "valueType": "other",
+                "valueValue": ""
+            }
+        ],
+        "x": 1240,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    }
+]
